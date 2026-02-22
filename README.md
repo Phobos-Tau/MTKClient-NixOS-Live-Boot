@@ -29,3 +29,5 @@ To build for aarch64:
 ```
 sudo nixos-rebuild build-image --image-variant iso --flake .#mtkclient_aarch64
 ```
+
+Built images may be found here: https://drive.proton.me/urls/DKTPCA86QR#g7CKnFBF6K4i
