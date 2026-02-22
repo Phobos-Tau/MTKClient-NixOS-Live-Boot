@@ -8,8 +8,6 @@ in
 
   # Enable networking
   networking.networkmanager.enable = true;
-
-  i18n.defaultLocale = "en_US.UTF-8";
   
   # ISO overrides
   image.modules.iso = {
@@ -26,7 +24,6 @@ in
   };
 
   boot.loader.timeout = lib.mkForce 1;
-
 
   # xfce
   services = {
@@ -59,13 +56,6 @@ in
    # xfce4-taskmanager
    # xfce4-terminal 
   ];
-
-
-  # Keymap 
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
 
   # User
   users.users."${user}" = {
@@ -130,18 +120,6 @@ in
   };
 
   services.system-config-printer.enable = false;
-
-  # Removes man pages.
-  documentation = {
-    enable = false;
-    nixos.enable = false;
-    man.enable = false;
-    info.enable = false;
-    dev.enable = false;
-  };
-  
-  # Trim down default packages (Removes perl, rsync, strace).
-  environment.defaultPackages = [];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
