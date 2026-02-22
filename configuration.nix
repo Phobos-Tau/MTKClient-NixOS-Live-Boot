@@ -15,6 +15,8 @@ in
   image.modules.iso = {
     isoImage = {
       squashfsCompression = "zstd -Xcompression-level 6";
+      # Smaller build, longer build time.
+      #squashfsCompression = "xz -Xdict-size 100% -b 1M"; 
       makeEfiBootable = lib.mkForce true;
     };
     # faster
@@ -32,7 +34,10 @@ in
       enable = true;
       desktopManager = {
         xterm.enable = false;
-        xfce.enable = true;
+        xfce = { 
+          enable = true;
+          enableScreensaver = false;
+        };
       };
     };
     displayManager.autoLogin = {
@@ -45,11 +50,11 @@ in
   environment.xfce.excludePackages = with pkgs.xfce; [
     #mousepad
     parole
-    #ristretto
+    ristretto
     #xfce4-appfinder
     #xfce4-notifyd
-    #xfce4-screenshooter
-   # xfce4-session
+    xfce4-screenshooter
+    #xfce4-session
    # xfce4-settings
    # xfce4-taskmanager
    # xfce4-terminal 
@@ -70,17 +75,16 @@ in
     password = "1234";
   };
 
+  security.sudo.wheelNeedsPassword = false;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = 
     (with pkgs; [
-      neovim 
       librewolf
     ])
-
     ++
-
     (with pkgs-unstable; [
       mtkclient
     ]);
@@ -88,11 +92,7 @@ in
   programs.adb.enable = true;
 
   home-manager.users.mtkclient = { ... }: 
-    let
-      wp = pkgs.nixos-artwork.wallpapers.nineish-dark-gray.gnomeFilePath;
-      background-dir  = "/home/${user}/.xfce4-wallpapers";
-      background-image = "${background-dir}/nineish-dark-gray.png";
-    in {
+    {
     xdg = {
       configFile."xfce4/helpers.rc".text = ''
       WebBrowser=librewolf
@@ -117,10 +117,6 @@ in
 
     };
 
-    home.file = {
-      ".xfce4-wallpapers/nineish-dark-gray.png".source = wp;
-    };
-
     xfconf = { 
       enable = true;
       settings = {
@@ -128,30 +124,24 @@ in
           "desktop-icons/file-icons/show-trash"      = true;
           "desktop-icons/file-icons/show-home"       = false;
           "desktop-icons/file-icons/show-filesystem" = false;
-          
-          "backdrop/screen0/monitor0/workspace0/color-style" = 0;
-          "backdrop/screen0/monitor0/workspace0/image-style" = 5;
-          "backdrop/screen0/monitor0/workspace0/last-image" = background-image;
-          "backdrop/screen0/monitor0/workspace1/color-style" = 0;
-          "backdrop/screen0/monitor0/workspace1/image-style" = 5;
-          "backdrop/screen0/monitor0/workspace1/last-image" = background-image;
-          "backdrop/screen0/monitorDP-1/workspace0/color-style" = 0;
-          "backdrop/screen0/monitorDP-1/workspace0/image-style" = 5;
-          "backdrop/screen0/monitorDP-1/workspace0/last-image" = background-image;
-          "backdrop/screen0/monitorDP-1/workspace1/color-style" = 0;
-          "backdrop/screen0/monitorDP-1/workspace1/image-style" = 5;
-          "backdrop/screen0/monitorDP-1/workspace1/last-image" = background-image;
-          "backdrop/screen0/monitorDP-2/workspace0/color-style" = 0;
-          "backdrop/screen0/monitorDP-2/workspace0/image-style" = 5;
-          "backdrop/screen0/monitorDP-2/workspace0/last-image" = background-image;
-          "backdrop/screen0/monitorDP-2/workspace1/color-style" = 0;
-          "backdrop/screen0/monitorDP-2/workspace1/image-style" = 5;
-          "backdrop/screen0/monitorDP-2/workspace1/last-image" = background-image;
-
         };
       };
     };
   };
+
+  services.system-config-printer.enable = false;
+
+  # Removes man pages.
+  documentation = {
+    enable = false;
+    nixos.enable = false;
+    man.enable = false;
+    info.enable = false;
+    dev.enable = false;
+  };
+  
+  # Trim down default packages (Removes perl, rsync, strace).
+  environment.defaultPackages = [];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
