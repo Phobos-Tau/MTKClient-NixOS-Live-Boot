@@ -167,7 +167,8 @@ in
             Categories=Utility;X-XFCE;
             StartupNotify=true
           '';
-          };
+        };
+      };
     };
 
     xdg = {
