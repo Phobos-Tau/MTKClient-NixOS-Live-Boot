@@ -40,13 +40,6 @@
                 useUserPackages = true;
                 backupFileExtension = "mv -f \"$1\" \"$1.$(date +%s).bak\"";
                 extraSpecialArgs = { inherit inputs pkgs-unstable; };
-                users.mtkclient = { pkgs, ... }: {
-                  home = {
-                    username = "mtkclient";
-                    homeDirectory = "/home/mtkclient";
-                    stateVersion = "25.11";
-                  };
-                };
               };
             }
           ];
@@ -65,7 +58,6 @@
               nixpkgs.hostPlatform = system;
             })
             ./configuration.nix
-          
             home-manager.nixosModules.home-manager
             {
               home-manager = {
@@ -73,13 +65,6 @@
                 useUserPackages = true;
                 backupFileExtension = "mv -f \"$1\" \"$1.$(date +%s).bak\"";
                 extraSpecialArgs = { inherit inputs pkgs-unstable; };
-                users.mtkclient = { pkgs, ... }: {
-                  home = {
-                    username = "mtkclient";
-                    homeDirectory = "/home/mtkclient";
-                    stateVersion = "25.11";
-                  };
-                };
               };
             }
           ];
