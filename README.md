@@ -19,7 +19,7 @@ Also refer to the NixOS manual page for building images: https://nixos.org/manua
 
 To build for x86_64:
 ```
-sudo nixos-rebuild build-image --image-variant iso --flake .#mtkclient_x86_64
+sudo nixos-rebuild build-image --image-variant iso --flake .#mtkclient_x86-64
 ```
 To build for aarch64:
 ```
